@@ -1,17 +1,27 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from matplotlib import pyplot as plt
 
 def data_header(dataframe):
     st.header('Data Header')
     st.write(data_2007_selection.head())
 
-def interactive_plot(dataframe):
+def scatter_plot(dataframe):
     x_axis=st.selectbox('Select x-axis value', options=data_2007.columns)
     y_axis=st.selectbox('Select y-axis value', options=data_2007.columns)
     col=st.color_picker('Select a plot colour')
 
     plot=px.scatter(data_2007_selection, x=x_axis, y=y_axis)
+    plot.update_traces(marker=dict(color=col))
+    st.plotly_chart(plot)
+
+def violin_plot(dataframe):
+    x_axis=st.selectbox('Select x-axis value', options=data_2007.columns)
+    y_axis=st.selectbox('Select y-axis value', options=data_2007.columns)
+    col=st.color_picker('Select a plot colour')
+
+    plot=px.violin(data_2007_selection, x=x_axis, y=y_axis)
     plot.update_traces(marker=dict(color=col))
     st.plotly_chart(plot)
 
@@ -38,11 +48,14 @@ options=st.sidebar.radio(
          "Pages",
          options=['Home',
          'Data header',
-         'Interactive plot']
+         'Scatter plot',
+         'Violin plot']
 )
 if options=='Home':
     st.dataframe(data_2007_selection)
 elif options=='Data header':
     data_header(data_2007)
-elif options=='Interactive plot':
-    interactive_plot(data_2007)
+elif options=='Scatter plot':
+    scatter_plot(data_2007)
+elif options=='Violin plot':
+    violin_plot(data_2007)
